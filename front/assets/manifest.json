@@ -1,6 +1,6 @@
 {
   "name": "egui Template PWA",
-  "short_name": "egui-template-pwa",
+  "short_name": "toys-pwa",
   "icons": [
     {
       "src": "./icon-256.png",
