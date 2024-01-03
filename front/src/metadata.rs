@@ -58,47 +58,30 @@ impl MetadataWindow {
           ui.label("image:");
           ui.text_edit_singleline(&mut self.metadata.image);
         });
-        CollapsingHeader::new("Attributes")
-          .default_open(true)
-          .show(ui, |ui| {
-            let mut i = self.attribute_count;
-            ui.add(egui::Slider::new(&mut i, 0..=20).text("count"));
 
-            let mut metadata = vec![Attribute::default(); i];
+        ui.horizontal(|ui| {
+          ui.label("attribute count:");
+          ui.add(egui::Slider::new(&mut self.attribute_count, 0..=20).text("count"));
+        });
 
-            for count in 0..i {
-              ui.horizontal(|ui| {
-                ui.label("trait_type:");
-                ui.text_edit_singleline(&mut metadata[count].trait_type);
-              });
-              ui.horizontal(|ui| {
-                ui.label("value:");
-                ui.text_edit_singleline(&mut metadata[count].value);
-              });
-            }
+        ui.label("Attributes");
+
+        for count in 0..self.attribute_count {
+          ui.horizontal(|ui| {
+            ui.label("trait_type:");
+            ui.text_edit_singleline(&mut self.metadata.attributes[count].trait_type);
           });
+          ui.horizontal(|ui| {
+            ui.label("value:");
+            ui.text_edit_singleline(&mut self.metadata.attributes[count].value);
+          });
+        }
 
         ui.vertical_centered(|ui| {
-          self.show_metadata = ui.button("Create Metadata").clicked();
+          if ui.button("Create Metadata").clicked() {
+            let metadata_json = serde_json::to_string_pretty(&self.metadata).unwrap();
 
-          if self.show_metadata {
-            let mut metadata = self.metadata.clone();
-            let mut attributes = metadata.attributes.clone();
-
-            if self.metadata_mode == MetadataMode::Single {
-              attributes = vec![Attribute::default(); self.attribute_count];
-            }
-
-            metadata.attributes = attributes;
-
-            let mut metadata_json = serde_json::to_string_pretty(&metadata).unwrap();
-
-            egui::Window::new("🔧 Settings")
-              .open(&mut self.show_metadata)
-              .vscroll(true)
-              .show(ctx, |ui| {
-                ui.text_edit_multiline(&mut metadata_json);
-              });
+            ehttp::Request::post("http://localhost:3001/json", metadata_json.as_bytes().to_vec());
           }
         });
       });

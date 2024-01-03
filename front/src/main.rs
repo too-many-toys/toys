@@ -15,14 +15,12 @@ fn main() -> eframe::Result<()> {
   eframe::run_native(
     "Toys!",
     native_options,
-    Box::new(|cc| Box::new(toys_front::ToyApp::new(cc))),
+    Box::new(|cc| Box::new(front::ToyApp::new(cc))),
   )
 }
 
-// When compiling to web using trunk:
 #[cfg(target_arch = "wasm32")]
 fn main() {
-  // Redirect `log` message to `console.log` and friends:
   eframe::WebLogger::init(log::LevelFilter::Debug).ok();
 
   let web_options = eframe::WebOptions::default();
@@ -32,7 +30,7 @@ fn main() {
       .start(
         "toys", // hardcode it
         web_options,
-        Box::new(|cc| Box::new(toys_front::ToyApp::new(cc))),
+        Box::new(|cc| Box::new(front::ToyApp::new(cc))),
       )
       .await
       .expect("failed to start eframe");
