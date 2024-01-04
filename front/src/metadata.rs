@@ -1,4 +1,6 @@
-use egui::CollapsingHeader;
+use std::collections::BTreeMap;
+
+static MAX_ATTRIBUTE_COUNT: usize = 10;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
@@ -6,6 +8,8 @@ pub struct MetadataWindow {
   pub is_open: bool,
 
   pub metadata: Metadata,
+  pub metadata_count: usize,
+
   pub attribute_count: usize,
 
   pub metadata_mode: MetadataMode,
@@ -18,7 +22,8 @@ impl Default for MetadataWindow {
     Self {
       is_open: false,
       metadata: Metadata::default(),
-      attribute_count: 0,
+      metadata_count: 0,
+      attribute_count: MAX_ATTRIBUTE_COUNT,
       metadata_mode: MetadataMode::Single,
       show_metadata: false,
     }
@@ -61,10 +66,12 @@ impl MetadataWindow {
 
         ui.horizontal(|ui| {
           ui.label("attribute count:");
-          ui.add(egui::Slider::new(&mut self.attribute_count, 0..=20).text("count"));
+          ui.add(egui::Slider::new(&mut self.attribute_count, 0..=MAX_ATTRIBUTE_COUNT).text("count"));
         });
 
         ui.label("Attributes");
+
+        self.metadata.attributes.resize(self.attribute_count, Attribute::default());
 
         for count in 0..self.attribute_count {
           ui.horizontal(|ui| {
@@ -79,9 +86,19 @@ impl MetadataWindow {
 
         ui.vertical_centered(|ui| {
           if ui.button("Create Metadata").clicked() {
-            let metadata_json = serde_json::to_string_pretty(&self.metadata).unwrap();
+            let metadata_json = serde_json::to_string(&self.metadata).unwrap();
+            log::info!("metadata_json: {}", metadata_json);
+            let mut headers = BTreeMap::new();
+            headers.insert("Content-Type".to_string(), "application/json".to_string());
 
-            ehttp::Request::post("http://localhost:3001/json", metadata_json.as_bytes().to_vec());
+            let request = ehttp::Request {
+              method: "POST".to_string(),
+              url: "http://localhost:3001/json".to_string(),
+              headers,
+              body: metadata_json.as_bytes().to_vec(),
+            };
+
+            ehttp::fetch(request, move |_| {});
           }
         });
       });
@@ -104,7 +121,7 @@ impl Default for Attribute {
   }
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Clone)]
+#[derive(serde::Deserialize, Clone)]
 #[serde(default)]
 struct Metadata {
   pub name: String,
@@ -121,6 +138,23 @@ impl Default for Metadata {
       image: "".to_string(),
       attributes: Vec::new(),
     }
+  }
+}
+
+impl serde::Serialize for Metadata {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+  where
+    S: serde::Serializer,
+  {
+    let a = self.attributes.clone();
+    let attributes = a
+      .into_iter()
+      .filter(|v| !v.trait_type.is_empty())
+      .collect::<Vec<Attribute>>();
+    let mut metadata = self.clone();
+    metadata.attributes = attributes;
+
+    metadata.serialize(serializer)
   }
 }
 

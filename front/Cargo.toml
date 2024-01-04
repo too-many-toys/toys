@@ -16,6 +16,7 @@ eframe = { version = "0.24.1", default-features = false, features = [
 log = "0.4"
 serde_json = "*"
 ehttp = "*"
+poll-promise = "*"
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
@@ -33,7 +34,7 @@ wasm-bindgen-futures = "0.4"
 opt-level = 2 # fast and small wasm
 
 # Optimize all dependencies even in debug builds:
-[profile.dev.package."*"]
+[profile.dev]
 opt-level = 2
 debug = true
 
