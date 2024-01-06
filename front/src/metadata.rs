@@ -1,8 +1,7 @@
 use std::io::Write;
-use std::ops::{Deref, DerefMut};
 
 use web_sys::wasm_bindgen::JsCast;
-use web_sys::{Blob, File};
+use web_sys::Blob;
 use zip::write::FileOptions;
 use zip::ZipWriter;
 
