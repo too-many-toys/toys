@@ -1,5 +1,10 @@
 var cacheName = "toys-pwa";
-var filesToCache = ["", "index.html", "toys.js", "toys_bg.wasm"];
+var filesToCache = [
+  "./",
+  "./index.html",
+  "./toys/toys.js",
+  "./toys/toys_bg.wasm",
+];
 
 /* Start the service worker and cache all of the app's content */
 self.addEventListener("install", function (e) {
