@@ -1,5 +1,5 @@
 [package]
-name = "front"
+name = "toys"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.75"
@@ -23,6 +23,7 @@ web-sys = { version = "0.3.66", features = [
     "BlobPropertyBag",
     "HtmlAnchorElement",
     "File",
+    "Document",
 ] }
 zip = { version = "*", default-features = false }
 
