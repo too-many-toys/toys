@@ -40,7 +40,7 @@ impl SingleMetadataWindow {
       .vscroll(true)
       .show(ctx, |ui| {
         ui.label("⚠️현재 버전은 attribute.value 값이 전부 문자열 입니다");
-        ui.label("json 파일과 xlsx 파일을 zip으로 만들어 줍니다");
+        ui.label("json 파일과 csv 파일을 zip으로 만들어 줍니다");
 
         ui.horizontal(|ui| {
           ui.label("project name:");
