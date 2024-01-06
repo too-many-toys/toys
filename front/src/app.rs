@@ -1,9 +1,9 @@
-use crate::metadata::MetadataWindow;
+use crate::metadata::SingleMetadataWindow;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct ToyApp {
-  metadata: MetadataWindow,
+  metadata: SingleMetadataWindow,
 
   settings: bool,
 }
@@ -12,7 +12,7 @@ impl Default for ToyApp {
   fn default() -> Self {
     Self {
       // Example stuff:
-      metadata: MetadataWindow::default(),
+      metadata: SingleMetadataWindow::default(),
       settings: false,
     }
   }
@@ -76,7 +76,9 @@ impl eframe::App for ToyApp {
 
         ui.collapsing("Web3", |ui| {
           // ui.checkbox(&mut self.metadata, "Create metadata");
-          self.metadata.show(ui);
+          ui.collapsing("메타데이터 만들기", |ui| {
+            self.metadata.show(ui);
+          });
         });
 
         ui.separator();

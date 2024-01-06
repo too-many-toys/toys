@@ -9,14 +9,22 @@ rust-version = "1.75"
 egui = "0.24.1"
 eframe = { version = "0.24.1", default-features = false, features = [
     # "accesskit",     # Make egui comptaible with screen readers. NOTE: adds a lot of dependencies.
-    "default_fonts", # Embed the default egui fonts.
-    "glow",          # Use the glow rendering backend. Alternative: "wgpu".
-    "persistence",   # Enable restoring app state when restarting the app.
+    # "default_fonts", # Embed the default egui fonts.
+    "glow",        # Use the glow rendering backend. Alternative: "wgpu".
+    "persistence", # Enable restoring app state when restarting the app.
 ] }
 log = "0.4"
 serde_json = "*"
 ehttp = "*"
 poll-promise = "*"
+web-sys = { version = "0.3.66", features = [
+    "Url",
+    "Blob",
+    "BlobPropertyBag",
+    "HtmlAnchorElement",
+    "File",
+] }
+zip = { version = "*", default-features = false }
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
