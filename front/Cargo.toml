@@ -16,7 +16,7 @@ eframe = { version = "0.24.1", default-features = false, features = [
 log = "0.4"
 serde_json = "*"
 ehttp = "*"
-poll-promise = "*"
+poll-promise = { version = "*", features = ["web"] }
 web-sys = { version = "0.3.66", features = [
     "Url",
     "Blob",
@@ -25,6 +25,8 @@ web-sys = { version = "0.3.66", features = [
     "File",
 ] }
 zip = { version = "*", default-features = false }
+ethers = { version = "2", features = ["rustls"] }
+getrandom = { version = "*", features = ["js"] }
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }

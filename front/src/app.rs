@@ -1,9 +1,13 @@
+use crate::chain_settings::ChainSettingsWindow;
 use crate::metadata::SingleMetadataWindow;
+use crate::wallet_balance::WalletBalanceWindow;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct ToyApp {
   metadata: SingleMetadataWindow,
+  wallet_balance: WalletBalanceWindow,
+  chain_settings: ChainSettingsWindow,
 
   settings: bool,
 }
@@ -11,8 +15,10 @@ pub struct ToyApp {
 impl Default for ToyApp {
   fn default() -> Self {
     Self {
-      // Example stuff:
       metadata: SingleMetadataWindow::default(),
+      wallet_balance: WalletBalanceWindow::default(),
+      chain_settings: ChainSettingsWindow::default(),
+
       settings: false,
     }
   }
@@ -79,6 +85,11 @@ impl eframe::App for ToyApp {
           ui.collapsing("메타데이터 만들기", |ui| {
             self.metadata.show(ui);
           });
+
+          ui.collapsing("지갑", |ui| {
+            self.wallet_balance.show(ui);
+            self.chain_settings.show(ui);
+          });
         });
 
         ui.separator();
@@ -93,6 +104,10 @@ impl eframe::App for ToyApp {
     });
 
     self.metadata.update(ctx, _frame);
+    self.chain_settings.update(ctx, _frame);
+    self
+      .wallet_balance
+      .update(ctx, _frame, &self.chain_settings);
 
     egui::Window::new("🔧 Settings")
       .open(&mut self.settings)
