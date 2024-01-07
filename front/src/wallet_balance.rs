@@ -50,9 +50,9 @@ impl WalletBalanceWindow {
                 for (_, balance) in r.iter() {
                   for (chain_name, _) in balance.iter() {
                     ui.label(chain_name);
-                    break;
                   }
                   ui.end_row();
+                  break;
                 }
               } else {
                 ui.add(egui::widgets::ProgressBar::new(0.5));
