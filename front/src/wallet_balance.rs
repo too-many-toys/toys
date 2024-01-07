@@ -50,6 +50,7 @@ impl WalletBalanceWindow {
                 for (_, balance) in r.iter() {
                   for (chain_name, _) in balance.iter() {
                     ui.label(chain_name);
+                    break;
                   }
                   ui.end_row();
                 }
@@ -65,7 +66,7 @@ impl WalletBalanceWindow {
                     address.split(":").collect::<Vec<&str>>()[0];
                   ui.label(address_name);
 
-                  for (chain_name, balance) in balance.iter() {
+                  for (_, balance) in balance.iter() {
                     ui.label(balance);
                   }
                   ui.end_row();
