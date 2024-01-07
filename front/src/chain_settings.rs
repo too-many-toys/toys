@@ -35,14 +35,6 @@ impl Default for ChainSettingsWindow {
 }
 
 impl ChainSettingsWindow {
-  pub fn get_chain_settings(&self) -> Vec<ChainSettings> {
-    self.chain_settings.clone()
-  }
-
-  pub fn get_wallet_addresses(&self) -> Vec<WalletInfo> {
-    self.wallet_addresses.clone()
-  }
-
   pub fn get_balance(
     &self,
   ) -> Promise<BTreeMap<String, BTreeMap<String, String>>> {
@@ -54,9 +46,20 @@ impl ChainSettingsWindow {
       let mut balances = BTreeMap::new();
 
       for wallet_info in wallet_infos.iter() {
-        balances.insert(wallet_info.address.clone(), BTreeMap::new());
+        let wallet_key = format!(
+          "{}:{}",
+          wallet_info.name.clone(),
+          wallet_info.address.clone(),
+        );
+        balances.insert(wallet_key, BTreeMap::new());
 
         for chain_info in chain_settings.iter() {
+          let wallet_key = format!(
+            "{}:{}",
+            wallet_info.name.clone(),
+            wallet_info.address.clone(),
+          );
+
           let provider =
             Provider::<Http>::try_from(chain_info.rpc_url.clone()).unwrap();
           let address = if let Ok(r) = wallet_info.address.parse::<Address>() {
@@ -67,7 +70,7 @@ impl ChainSettingsWindow {
 
           let balance = provider.get_balance(address, None).await;
 
-          balances.get_mut(&wallet_info.address).unwrap().insert(
+          balances.get_mut(&wallet_key).unwrap().insert(
             chain_info.chain_name.clone(),
             match balance {
               Ok(balance) => ethers::utils::format_ether(balance),
@@ -84,7 +87,6 @@ impl ChainSettingsWindow {
     });
 
     promise
-    //https://api.test.wemix.com/
   }
 }
 

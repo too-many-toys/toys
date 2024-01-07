@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 
-use ethers::types::U256;
 use poll_promise::Promise;
 
 use crate::chain_settings::ChainSettingsWindow;
@@ -45,17 +44,28 @@ impl WalletBalanceWindow {
           .striped(true)
           .min_col_width(50.0)
           .show(ui, |ui| {
-            ui.label("address");
-            for s in chain_settings.chain_settings.iter() {
-              ui.label(&s.chain_name);
+            ui.label("지갑 이름");
+            if let Some(s) = &self.balances {
+              if let Some(r) = s.ready() {
+                for (_, balance) in r.iter() {
+                  for (chain_name, _) in balance.iter() {
+                    ui.label(chain_name);
+                  }
+                  ui.end_row();
+                }
+              } else {
+                ui.add(egui::widgets::ProgressBar::new(0.5));
+              }
             }
-            ui.end_row();
 
             if let Some(s) = &self.balances {
               if let Some(r) = s.ready() {
                 for (address, balance) in r.iter() {
-                  ui.label(address);
-                  for (_, balance) in balance.iter() {
+                  let address_name =
+                    address.split(":").collect::<Vec<&str>>()[0];
+                  ui.label(address_name);
+
+                  for (chain_name, balance) in balance.iter() {
                     ui.label(balance);
                   }
                   ui.end_row();
