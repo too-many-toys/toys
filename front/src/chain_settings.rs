@@ -88,6 +88,20 @@ impl ChainSettingsWindow {
 
     promise
   }
+
+  pub fn set_provider(&mut self) {
+    // TODO: 올바른 URL이 아닐 때 처리
+    let chain_settings = self.chain_settings.clone();
+
+    let promise = Promise::spawn_local(async move {
+      for chain_info in chain_settings.iter() {
+        let provider =
+          Provider::<Http>::try_from(chain_info.rpc_url.clone()).unwrap();
+      }
+    });
+
+    promise
+  }
 }
 
 impl ChainSettingsWindow {
@@ -198,7 +212,7 @@ pub struct ChainSettings {
   pub chain_name: String,
   pub rpc_url: String,
   #[serde(skip)]
-  pub provider: Option<Provider<Http>>,
+  pub provider: Option<Promise<Provider<Http>>>,
 }
 
 impl Default for ChainSettings {

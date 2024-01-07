@@ -25,7 +25,7 @@ web-sys = { version = "0.3.66", features = [
     "File",
 ] }
 zip = { version = "*", default-features = false }
-ethers = { version = "2", features = ["rustls"] }
+ethers = { version = "2", features = ["rustls", "abigen"] }
 getrandom = { version = "*", features = ["js"] }
 
 # You only need serde if you want app persistence:

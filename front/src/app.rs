@@ -1,4 +1,6 @@
 use crate::chain_settings::ChainSettingsWindow;
+use crate::contract_erc20::ERC20ContractWindow;
+// use crate::contract_erc721::ERC721ContractWindow;
 use crate::metadata::SingleMetadataWindow;
 use crate::wallet_balance::WalletBalanceWindow;
 
@@ -9,6 +11,8 @@ pub struct ToyApp {
   wallet_balance: WalletBalanceWindow,
   chain_settings: ChainSettingsWindow,
 
+  erc20_contract: ERC20ContractWindow,
+
   settings: bool,
 }
 
@@ -18,6 +22,8 @@ impl Default for ToyApp {
       metadata: SingleMetadataWindow::default(),
       wallet_balance: WalletBalanceWindow::default(),
       chain_settings: ChainSettingsWindow::default(),
+
+      erc20_contract: ERC20ContractWindow::default(),
 
       settings: false,
     }
@@ -90,6 +96,11 @@ impl eframe::App for ToyApp {
             self.wallet_balance.show(ui);
             self.chain_settings.show(ui);
           });
+
+          ui.collapsing("컨트랙트 콜", |ui| {
+            self.erc20_contract.show(ui);
+            // self.erc721_contract.show(ui);
+          });
         });
 
         ui.separator();
@@ -108,7 +119,9 @@ impl eframe::App for ToyApp {
     self
       .wallet_balance
       .update(ctx, _frame, &self.chain_settings);
-
+    self
+      .erc20_contract
+      .update(ctx, _frame, &mut self.chain_settings);
     egui::Window::new("🔧 Settings")
       .open(&mut self.settings)
       .vscroll(true)
