@@ -1,17 +1,20 @@
 use crate::chain_settings::ChainSettingsWindow;
-use crate::contract_erc20::ERC20ContractWindow;
+use crate::contract_erc721::ERC721ContractWindow;
 // use crate::contract_erc721::ERC721ContractWindow;
 use crate::metadata::SingleMetadataWindow;
 use crate::wallet_balance::WalletBalanceWindow;
+use crate::wallet_settings::WalletSettingsWindow;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)]
 pub struct ToyApp {
   metadata: SingleMetadataWindow,
   wallet_balance: WalletBalanceWindow,
+
+  wallet_settings: WalletSettingsWindow,
   chain_settings: ChainSettingsWindow,
 
-  erc20_contract: ERC20ContractWindow,
+  erc20_contract: ERC721ContractWindow,
 
   settings: bool,
 }
@@ -21,9 +24,11 @@ impl Default for ToyApp {
     Self {
       metadata: SingleMetadataWindow::default(),
       wallet_balance: WalletBalanceWindow::default(),
+
+      wallet_settings: WalletSettingsWindow::default(),
       chain_settings: ChainSettingsWindow::default(),
 
-      erc20_contract: ERC20ContractWindow::default(),
+      erc20_contract: ERC721ContractWindow::default(),
 
       settings: false,
     }
@@ -94,13 +99,15 @@ impl eframe::App for ToyApp {
 
           ui.collapsing("지갑", |ui| {
             self.wallet_balance.show(ui);
-            self.chain_settings.show(ui);
+            self.wallet_settings.show(ui);
           });
 
           ui.collapsing("컨트랙트 콜", |ui| {
             self.erc20_contract.show(ui);
             // self.erc721_contract.show(ui);
           });
+
+          self.chain_settings.show(ui);
         });
 
         ui.separator();
@@ -115,10 +122,14 @@ impl eframe::App for ToyApp {
     });
 
     self.metadata.update(ctx, _frame);
+    self.wallet_settings.update(ctx, _frame);
     self.chain_settings.update(ctx, _frame);
-    self
-      .wallet_balance
-      .update(ctx, _frame, &self.chain_settings);
+    self.wallet_balance.update(
+      ctx,
+      _frame,
+      &self.chain_settings,
+      &self.wallet_settings,
+    );
     self
       .erc20_contract
       .update(ctx, _frame, &mut self.chain_settings);

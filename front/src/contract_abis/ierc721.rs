@@ -1,4 +1,4 @@
-pub use ierc20::*;
+pub use ierc721::*;
 /// This module was auto-generated with ethers-rs Abigen.
 /// More information at: <https://github.com/gakonst/ethers-rs>
 #[allow(
@@ -9,7 +9,7 @@ pub use ierc20::*;
     dead_code,
     non_camel_case_types,
 )]
-pub mod ierc20 {
+pub mod ierc721 {
     const _: () = {
         ::core::include_bytes!("/home/q/Github/contract/src/erc721.json");
     };
@@ -461,32 +461,32 @@ pub mod ierc20 {
         }
     }
     ///The parsed JSON ABI of the contract.
-    pub static IERC20_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(
+    pub static IERC721_ABI: ::ethers::contract::Lazy<::ethers::core::abi::Abi> = ::ethers::contract::Lazy::new(
         __abi,
     );
-    pub struct IERC20<M>(::ethers::contract::Contract<M>);
-    impl<M> ::core::clone::Clone for IERC20<M> {
+    pub struct IERC721<M>(::ethers::contract::Contract<M>);
+    impl<M> ::core::clone::Clone for IERC721<M> {
         fn clone(&self) -> Self {
             Self(::core::clone::Clone::clone(&self.0))
         }
     }
-    impl<M> ::core::ops::Deref for IERC20<M> {
+    impl<M> ::core::ops::Deref for IERC721<M> {
         type Target = ::ethers::contract::Contract<M>;
         fn deref(&self) -> &Self::Target {
             &self.0
         }
     }
-    impl<M> ::core::ops::DerefMut for IERC20<M> {
+    impl<M> ::core::ops::DerefMut for IERC721<M> {
         fn deref_mut(&mut self) -> &mut Self::Target {
             &mut self.0
         }
     }
-    impl<M> ::core::fmt::Debug for IERC20<M> {
+    impl<M> ::core::fmt::Debug for IERC721<M> {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-            f.debug_tuple(::core::stringify!(IERC20)).field(&self.address()).finish()
+            f.debug_tuple(::core::stringify!(IERC721)).field(&self.address()).finish()
         }
     }
-    impl<M: ::ethers::providers::Middleware> IERC20<M> {
+    impl<M: ::ethers::providers::Middleware> IERC721<M> {
         /// Creates a new contract instance with the specified `ethers` client at
         /// `address`. The contract derefs to a `ethers::Contract` object.
         pub fn new<T: Into<::ethers::core::types::Address>>(
@@ -496,7 +496,7 @@ pub mod ierc20 {
             Self(
                 ::ethers::contract::Contract::new(
                     address.into(),
-                    IERC20_ABI.clone(),
+                    IERC721_ABI.clone(),
                     client,
                 ),
             )
@@ -650,12 +650,12 @@ pub mod ierc20 {
         /// Returns an `Event` builder for all the events of this contract.
         pub fn events(
             &self,
-        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IERC20Events> {
+        ) -> ::ethers::contract::builders::Event<::std::sync::Arc<M>, M, IERC721Events> {
             self.0.event_with_filter(::core::default::Default::default())
         }
     }
     impl<M: ::ethers::providers::Middleware> From<::ethers::contract::Contract<M>>
-    for IERC20<M> {
+    for IERC721<M> {
         fn from(contract: ::ethers::contract::Contract<M>) -> Self {
             Self::new(contract.address(), contract.client())
         }
@@ -718,28 +718,28 @@ pub mod ierc20 {
     }
     ///Container type for all of the contract's events
     #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
-    pub enum IERC20Events {
+    pub enum IERC721Events {
         ApprovalFilter(ApprovalFilter),
         ApprovalForAllFilter(ApprovalForAllFilter),
         TransferFilter(TransferFilter),
     }
-    impl ::ethers::contract::EthLogDecode for IERC20Events {
+    impl ::ethers::contract::EthLogDecode for IERC721Events {
         fn decode_log(
             log: &::ethers::core::abi::RawLog,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::Error> {
             if let Ok(decoded) = ApprovalFilter::decode_log(log) {
-                return Ok(IERC20Events::ApprovalFilter(decoded));
+                return Ok(IERC721Events::ApprovalFilter(decoded));
             }
             if let Ok(decoded) = ApprovalForAllFilter::decode_log(log) {
-                return Ok(IERC20Events::ApprovalForAllFilter(decoded));
+                return Ok(IERC721Events::ApprovalForAllFilter(decoded));
             }
             if let Ok(decoded) = TransferFilter::decode_log(log) {
-                return Ok(IERC20Events::TransferFilter(decoded));
+                return Ok(IERC721Events::TransferFilter(decoded));
             }
             Err(::ethers::core::abi::Error::InvalidData)
         }
     }
-    impl ::core::fmt::Display for IERC20Events {
+    impl ::core::fmt::Display for IERC721Events {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::ApprovalFilter(element) => ::core::fmt::Display::fmt(element, f),
@@ -750,17 +750,17 @@ pub mod ierc20 {
             }
         }
     }
-    impl ::core::convert::From<ApprovalFilter> for IERC20Events {
+    impl ::core::convert::From<ApprovalFilter> for IERC721Events {
         fn from(value: ApprovalFilter) -> Self {
             Self::ApprovalFilter(value)
         }
     }
-    impl ::core::convert::From<ApprovalForAllFilter> for IERC20Events {
+    impl ::core::convert::From<ApprovalForAllFilter> for IERC721Events {
         fn from(value: ApprovalForAllFilter) -> Self {
             Self::ApprovalForAllFilter(value)
         }
     }
-    impl ::core::convert::From<TransferFilter> for IERC20Events {
+    impl ::core::convert::From<TransferFilter> for IERC721Events {
         fn from(value: TransferFilter) -> Self {
             Self::TransferFilter(value)
         }
@@ -949,7 +949,7 @@ pub mod ierc20 {
     }
     ///Container type for all of the contract's call
     #[derive(Clone, ::ethers::contract::EthAbiType, Debug, PartialEq, Eq, Hash)]
-    pub enum IERC20Calls {
+    pub enum IERC721Calls {
         Approve(ApproveCall),
         BalanceOf(BalanceOfCall),
         GetApproved(GetApprovedCall),
@@ -962,7 +962,7 @@ pub mod ierc20 {
         SupportsInterface(SupportsInterfaceCall),
         TransferFrom(TransferFromCall),
     }
-    impl ::ethers::core::abi::AbiDecode for IERC20Calls {
+    impl ::ethers::core::abi::AbiDecode for IERC721Calls {
         fn decode(
             data: impl AsRef<[u8]>,
         ) -> ::core::result::Result<Self, ::ethers::core::abi::AbiError> {
@@ -1025,7 +1025,7 @@ pub mod ierc20 {
             Err(::ethers::core::abi::Error::InvalidData.into())
         }
     }
-    impl ::ethers::core::abi::AbiEncode for IERC20Calls {
+    impl ::ethers::core::abi::AbiEncode for IERC721Calls {
         fn encode(self) -> Vec<u8> {
             match self {
                 Self::Approve(element) => ::ethers::core::abi::AbiEncode::encode(element),
@@ -1058,7 +1058,7 @@ pub mod ierc20 {
             }
         }
     }
-    impl ::core::fmt::Display for IERC20Calls {
+    impl ::core::fmt::Display for IERC721Calls {
         fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
             match self {
                 Self::Approve(element) => ::core::fmt::Display::fmt(element, f),
@@ -1077,58 +1077,58 @@ pub mod ierc20 {
             }
         }
     }
-    impl ::core::convert::From<ApproveCall> for IERC20Calls {
+    impl ::core::convert::From<ApproveCall> for IERC721Calls {
         fn from(value: ApproveCall) -> Self {
             Self::Approve(value)
         }
     }
-    impl ::core::convert::From<BalanceOfCall> for IERC20Calls {
+    impl ::core::convert::From<BalanceOfCall> for IERC721Calls {
         fn from(value: BalanceOfCall) -> Self {
             Self::BalanceOf(value)
         }
     }
-    impl ::core::convert::From<GetApprovedCall> for IERC20Calls {
+    impl ::core::convert::From<GetApprovedCall> for IERC721Calls {
         fn from(value: GetApprovedCall) -> Self {
             Self::GetApproved(value)
         }
     }
-    impl ::core::convert::From<IsApprovedForAllCall> for IERC20Calls {
+    impl ::core::convert::From<IsApprovedForAllCall> for IERC721Calls {
         fn from(value: IsApprovedForAllCall) -> Self {
             Self::IsApprovedForAll(value)
         }
     }
-    impl ::core::convert::From<MintCall> for IERC20Calls {
+    impl ::core::convert::From<MintCall> for IERC721Calls {
         fn from(value: MintCall) -> Self {
             Self::Mint(value)
         }
     }
-    impl ::core::convert::From<OwnerOfCall> for IERC20Calls {
+    impl ::core::convert::From<OwnerOfCall> for IERC721Calls {
         fn from(value: OwnerOfCall) -> Self {
             Self::OwnerOf(value)
         }
     }
-    impl ::core::convert::From<SafeTransferFromCall> for IERC20Calls {
+    impl ::core::convert::From<SafeTransferFromCall> for IERC721Calls {
         fn from(value: SafeTransferFromCall) -> Self {
             Self::SafeTransferFrom(value)
         }
     }
     impl ::core::convert::From<SafeTransferFromWithFromAndToAndDataCall>
-    for IERC20Calls {
+    for IERC721Calls {
         fn from(value: SafeTransferFromWithFromAndToAndDataCall) -> Self {
             Self::SafeTransferFromWithFromAndToAndData(value)
         }
     }
-    impl ::core::convert::From<SetApprovalForAllCall> for IERC20Calls {
+    impl ::core::convert::From<SetApprovalForAllCall> for IERC721Calls {
         fn from(value: SetApprovalForAllCall) -> Self {
             Self::SetApprovalForAll(value)
         }
     }
-    impl ::core::convert::From<SupportsInterfaceCall> for IERC20Calls {
+    impl ::core::convert::From<SupportsInterfaceCall> for IERC721Calls {
         fn from(value: SupportsInterfaceCall) -> Self {
             Self::SupportsInterface(value)
         }
     }
-    impl ::core::convert::From<TransferFromCall> for IERC20Calls {
+    impl ::core::convert::From<TransferFromCall> for IERC721Calls {
         fn from(value: TransferFromCall) -> Self {
             Self::TransferFrom(value)
         }
