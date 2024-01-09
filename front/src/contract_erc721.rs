@@ -1,9 +1,7 @@
 use crate::contract_abis::ierc721::IERC721;
 use std::sync::Arc;
 
-// use crate::contract_abis::ierc721::IERC721;
 use ethers::{
-  prelude::abigen,
   providers::{Http, Provider},
   types::{Address, U256},
 };

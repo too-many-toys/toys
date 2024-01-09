@@ -1,9 +1,6 @@
-use std::collections::BTreeMap;
-
 use ethers::{
   prelude::{Http, Provider},
-  providers::Middleware,
-  types::{Address, U256},
+  types::Address,
 };
 use poll_promise::Promise;
 
