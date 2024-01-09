@@ -44,7 +44,7 @@ impl Default for ERC721ContractWindow {
 
 impl ERC721ContractWindow {
   pub fn show(&mut self, ui: &mut egui::Ui) {
-    ui.checkbox(&mut self.is_open, "ERC20");
+    ui.checkbox(&mut self.is_open, "ERC721");
   }
 
   pub fn update(
@@ -53,7 +53,7 @@ impl ERC721ContractWindow {
     _frame: &mut eframe::Frame,
     chain_settings: &mut ChainSettingsWindow,
   ) {
-    egui::Window::new("ERC20 컨트랙트")
+    egui::Window::new("ERC721 컨트랙트")
       .open(&mut self.is_open)
       .vscroll(true)
       .show(ctx, |ui| {
@@ -107,8 +107,7 @@ impl ERC721ContractWindow {
                 .rpc_url
                 .clone(),
 
-              balance_of: None,
-              balance_of_target_address: "".to_string(),
+              ..Default::default()
             });
 
             self.selected = 0;
@@ -120,6 +119,7 @@ impl ERC721ContractWindow {
         for i in 0..self.contracts.len() {
           ui.horizontal(|ui| {
             ui.collapsing(self.contracts[i].name.clone(), |ui| {
+              // BALANCE_OF
               ui.horizontal(|ui| {
                 ui.label("balanceOf");
                 ui.text_edit_singleline(
@@ -134,6 +134,23 @@ impl ERC721ContractWindow {
               if ui.button("호출").clicked() {
                 self.contracts[i].balance_of();
               };
+
+              // OWNER_OF
+              ui.horizontal(|ui| {
+                ui.label("ownerOf");
+                ui.text_edit_singleline(
+                  &mut self.contracts[i].owner_of_target_token_id,
+                );
+              });
+              if let Some(promise) = &self.contracts[i].owner_of {
+                if let Some(owner_of) = promise.ready() {
+                  ui.label(format!("{}", owner_of));
+                }
+              }
+              if ui.button("호출").clicked() {
+                self.contracts[i].owner_of();
+              };
+
               if ui.button("컨트랙트 삭제").clicked() {
                 self.contracts.remove(i);
               }
@@ -156,6 +173,11 @@ pub struct ERC721Contract {
   pub balance_of: Option<Promise<U256>>,
   #[serde(skip)]
   pub balance_of_target_address: String,
+
+  #[serde(skip)]
+  pub owner_of: Option<Promise<Address>>,
+  #[serde(skip)]
+  pub owner_of_target_token_id: String,
 }
 
 impl Default for ERC721Contract {
@@ -168,6 +190,9 @@ impl Default for ERC721Contract {
 
       balance_of: None,
       balance_of_target_address: "".to_string(),
+
+      owner_of: None,
+      owner_of_target_token_id: "".to_string(),
     }
   }
 }
@@ -190,5 +215,23 @@ impl ERC721Contract {
     });
 
     self.balance_of = Some(promise);
+  }
+
+  pub fn owner_of(&mut self) {
+    let contract_address = self.address.parse::<Address>().unwrap();
+    let token_id = self.owner_of_target_token_id.parse::<U256>().unwrap();
+    let provider = Provider::<Http>::try_from(self.rpc_url.clone()).unwrap();
+    let client = Arc::new(provider);
+    let contract = IERC721::new(contract_address, client);
+
+    let promise = Promise::spawn_local(async move {
+      if let Ok(owner_of) = contract.owner_of(token_id).call().await {
+        owner_of
+      } else {
+        Address::zero()
+      }
+    });
+
+    self.owner_of = Some(promise);
   }
 }

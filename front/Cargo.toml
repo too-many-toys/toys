@@ -6,8 +6,8 @@ rust-version = "1.75"
 
 
 [dependencies]
-egui = "0.24.1"
-eframe = { version = "0.24.1", default-features = false, features = [
+egui = "0.25.0"
+eframe = { version = "0.25.0", default-features = false, features = [
     # "accesskit",     # Make egui comptaible with screen readers. NOTE: adds a lot of dependencies.
     # "default_fonts", # Embed the default egui fonts.
     "glow",        # Use the glow rendering backend. Alternative: "wgpu".
@@ -44,6 +44,8 @@ wasm-bindgen-futures = "0.4"
 lto = true
 codegen-units = 1
 opt-level = "z"   # fast and small wasm
+panic = "abort"
+strip = true
 
 # Optimize all dependencies even in debug builds:
 [profile.dev]
